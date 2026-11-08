@@ -23,5 +23,5 @@ def withdraw(amount: uint256):
 @external
 def set_fee(f: uint256):
     assert msg.sender == self.owner
-    assert f <= 1000
+    assert f <= 500
     self.fee_bps = f
