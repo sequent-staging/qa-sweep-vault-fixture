@@ -14,11 +14,20 @@ def __init__():
 def deposit():
     self.balances[msg.sender] += msg.value
 
-@external
-def withdraw(amount: uint256):
+@internal
+def _withdraw(amount: uint256, recipient: address):
     self.balances[msg.sender] -= amount
     cut: uint256 = amount * self.fee_bps // 10000
-    send(msg.sender, amount - cut)
+    send(recipient, amount - cut)
+
+@external
+def withdraw(amount: uint256):
+    self._withdraw(amount, msg.sender)
+
+@external
+def withdraw_to(amount: uint256, recipient: address):
+    assert recipient != empty(address)
+    self._withdraw(amount, recipient)
 
 @external
 def set_fee(f: uint256):
